@@ -30,10 +30,7 @@ public String Choice ()
     return Selection;
 }
 
-    /**
-     *
-     * 
-     */
+   
     public static class Connection_DB {
 
         // Connection string to MYSQL database
