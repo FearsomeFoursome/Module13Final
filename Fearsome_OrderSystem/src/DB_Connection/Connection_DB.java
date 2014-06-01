@@ -5,6 +5,7 @@
 package DB_Connection;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 
 /**
@@ -38,19 +39,42 @@ public class Connection_DB {
 
             public static void main(String[] args) {
         initialize();
+         Menu selection = new Menu();
         
-        System.out.print("welcome to our store\n");
-        System.out.print("please select from our menu\n");
+                BufferedReader brin = new BufferedReader(new InputStreamReader(System.in));
+              
+        //Run the program until user enters "4"
         
-        BufferedReader brin = new BufferedReader(new InputStreamReader(System.in));
-    try
+        try
         {
            
-            //Loop for menu
-            while (!"6".equals)
+            
+            while (!"4".equals(selection.Choice()))
             {
                 
             
-            if("6".equals()         // user enters "6
-}
-}
+            if("4".equals(selection.Choice()))         // user enters "4"
+                continue;
+            
+            System.out.print ("Welcome to Olympic Store\n\n\n\n\n");
+            System.out.print ("Please make a Selection, just type in number\n\n\n\n\n");            
+            System.out.print ("Would you like: \n\n");
+            System.out.print ("1.Login\n\n");
+            System.out.print ("2.Place Order \n\n");
+            System.out.print ("3.Update / Modify Order \n\n");
+            System.out.print ("4.Exit \n\n");
+                      selection.readSelection( brin.readLine());
+                      // user enters "4"
+                if("4".equals(selection.Choice()))        
+                    continue;
+            
+            }
+        }
+catch (IOException | NumberFormatException e) 
+            {
+                System.out.println ("Error:" + e);
+            }       // end catch
+        
+    
+   
+        
