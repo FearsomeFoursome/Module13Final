@@ -8,7 +8,7 @@ package DB_Connection;
  *
  * @author Gregory
  */
-public class Customer {
+public class Customer_DB {
     
         private static final String CUSTOMER_TABLE_NAME = "FEARSOME_CUSTOMERS";   
     public static class TableException extends Exception{
@@ -17,6 +17,7 @@ public class Customer {
         }
     }
     
+  /*
     // Drop Table
     
     static void reset()throws TableException{
@@ -41,9 +42,11 @@ public class Customer {
             "BillAddress integer NOT NULL, " + 
             "ShipAddress integer NOT NULL, " + 
             "EmailAddress varchar(50) NOT NULL, " + 
-            "PhoneNumber varchar(13) NULL " + 
-            "OrderIDs integer NULL " +
-            "PRIMARY KEY (CustomerID))";
+            "PhoneNumber varchar(13) NULL, " + 
+            "OrderIDs integer NULL, " +
+            "PRIMARY KEY (CustomerID), " +
+            "FOREIGN KEY (BillAddress) REFERENCE FEARSOME_ADDRESS (AddressID), " +
+            "FOREIGN KEY (ShipAddress) REFERENCE FEARSOME_ADDRESS (AddressID))";
             stmt = Connection_DB.dbCon.createStatement();
             stmt.executeUpdate(createString);
         } catch (java.sql.SQLException e) {
@@ -53,18 +56,18 @@ public class Customer {
     
 /**
  * @author Bella Belova
- * @param CustomerID A unique Customer ID
- * @param FirstName Customer First Name
- * @param LastName Customer Last Name
+ * @param CustomerID A unique Customer_DB ID
+ * @param FirstName Customer_DB First Name
+ * @param LastName Customer_DB Last Name
  * @param BillAddress An integer that except "0" or "1" for checked or unchecked Billing Address
  * @param ShipAddress An integer that except "0" or "1" for checked or unchecked Shipping Address
- * @param EmailAddress Customer EMail Address
+ * @param EmailAddress Customer_DB EMail Address
  * @param PhoneNumber Varchar field that will except parenthesis and numbers
  * @param OrderIDs Order Number
  * @throws TableException This exception represents a problem with the access and updating of the DB table.
  */
-    
-    //Insert Customer data
+ /*   
+    //Insert Customer_DB data
     public static void createCustomer(int Cust_ID, String FName, String LName, int BillAddr, 
                                         int ShipAddr, String EMail, String PhNbr, int OrderNbr) 
         throws TableException{
@@ -80,11 +83,11 @@ public class Customer {
           stmt = Connection_DB.dbCon.createStatement();
           stmt.executeUpdate(createString);  
         } catch (java.sql.SQLException e) {
-            throw new TableException("Unable to create a new Customer in the Database." + "\nDetaill: " + e);
+            throw new TableException("Unable to create a new Customer_DB in the Database." + "\nDetaill: " + e);
         }
     }
 
-    
+*/    
     // Search table data
     public static java.util.ArrayList searchbyLASTNAME(String LAST_NAME)
             throws TableException{
