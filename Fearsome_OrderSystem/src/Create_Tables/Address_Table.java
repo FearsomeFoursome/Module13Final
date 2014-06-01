@@ -10,7 +10,7 @@ package Create_Tables;
  *
  * @author Gregory
  */
-public class Address {
+public class Address_Table {
     
     private static final String ADDRESS_TABLE_NAME = "FEARSOME_ADDRESS";  
     private static java.sql.Connection sqlConn;
@@ -20,7 +20,7 @@ public class Address {
         }
     }
     
-    public Address()
+    public Address_Table()
     {
         sqlConn = Connect.SQL.getSQLConn();
     }
@@ -61,7 +61,7 @@ public class Address {
         }        
     }
 
-        //Insert Address data
+        //Insert Address_Table data
     public static void createAddress(int Addr_ID, int Cust_ID, String Addr_Type,
                                         String Addr1, String Addr2, String Addr_City, String Addr_State, int Addr_Zip) 
         throws TableException{

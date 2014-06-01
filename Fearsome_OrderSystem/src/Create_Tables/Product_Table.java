@@ -4,13 +4,14 @@
  */
 package Create_Tables;
 
+
 /**
  *
  * @author Gregory
  */
-public class Inventory {
+public class Product_Table {
     
-    private static final String INVENTORY_TABLE_NAME = "FEARSOME_INVENTORY";
+    private static final String PRODUCT_TABLE_NAME = "FEARSOME_PRODUCT";
     private static java.sql.Connection sqlConn;
     public static class TableException extends Exception{
         TableException(String s){
@@ -18,13 +19,13 @@ public class Inventory {
         }
     }
     
-    public Inventory()
+    public Product_Table()
     {
         sqlConn = Connect.MYSQL.getMSQLConn();
     }
     // Drop Table
     
- public static java.util.ArrayList searchbyItemID(int Item_ID)
+ public static java.util.ArrayList searchbyProductID(String Product_ID)
             throws TableException{
         int id; String fn; String ln;
         java.sql.Statement stmt;
@@ -33,7 +34,7 @@ public class Inventory {
         java.sql.ResultSet rs = null;
         
         try{
-          String createString = "select * from " + INVENTORY_TABLE_NAME + " where ItemID like %" + Item_ID + "%;" ;                
+          String createString = "select * from " + PRODUCT_TABLE_NAME + " where ProductID like '%" + Product_ID + "%';" ;                
           stmt = sqlConn.createStatement();
           rs = stmt.executeQuery(createString);  
           results = new java.util.ArrayList();
@@ -46,7 +47,6 @@ public class Inventory {
         }
         return results;
     }
-
 
 
     

@@ -8,7 +8,7 @@ package Create_Tables;
  *
  * @author Gregory
  */
-public class Orders {
+public class Orders_Table {
     
     private static final String ORDERS_TABLE_NAME = "FEARSOME_ORDERS";   
     private static java.sql.Connection sqlConn;
@@ -18,7 +18,7 @@ public class Orders {
         }
     }
     
-    public Orders()
+    public Orders_Table()
     {
         sqlConn = Connect.SQL.getSQLConn();
     }

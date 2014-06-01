@@ -8,7 +8,7 @@ package Create_Tables;
  *
  * @author Gregory
  */
-public class Items {
+public class Items_Table {
     
     private static final String ITEMS_TABLE_NAME = "FEARSOME_ITEMS";   
     private static java.sql.Connection sqlConn;
@@ -18,7 +18,7 @@ public class Items {
         }
     }
     
-    public Items()
+    public Items_Table()
     {
         sqlConn = Connect.SQL.getSQLConn();
     }
@@ -39,7 +39,7 @@ public class Items {
         }
         */
         try{
-            //Create the Items Table
+            //Create the Items_Table Table
             createString =
             "create table " + ITEMS_TABLE_NAME + " " + 
             "(OrderItemID integer identity (1,1) NOT NULL, " +
@@ -56,7 +56,7 @@ public class Items {
     }
 
     
-        //Insert Items data
+        //Insert Items_Table data
     public static void createItems(int Ord_Item_ID, int Ord_ID, int Prod_ID, int QTY) 
         throws TableException{
     

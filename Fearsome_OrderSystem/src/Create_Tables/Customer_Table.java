@@ -2,35 +2,42 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package DB_Connection;
+package Create_Tables;
+
 
 /**
  *
  * @author Gregory
  */
-public class Customer {
+public class Customer_Table {
     
-        private static final String CUSTOMER_TABLE_NAME = "FEARSOME_CUSTOMERS";   
+    private static final String CUSTOMER_TABLE_NAME = "FEARSOME_CUSTOMERS";
+    private static java.sql.Connection sqlConn;
     public static class TableException extends Exception{
         TableException(String s){
             super(s);
         }
     }
     
+    public Customer_Table()
+    {
+        sqlConn = Connect.SQL.getSQLConn();
+    }
     // Drop Table
     
     static void reset()throws TableException{
         String createString;    
         java.sql.Statement stmt;
+        /*
         try{      
             createString = "drop table " + CUSTOMER_TABLE_NAME + ";";
-            stmt = Connection_DB.dbCon.createStatement();
+            stmt = sqlConn.createStatement();
             stmt.executeUpdate(createString);
          } catch (java.sql.SQLException e) {
              if (!(e.getMessage().contains("Unknown")))
                 System.err.println(e); 
         }
-       
+       */
         try{
             //Create the CUSTOMER Table
             createString =
@@ -43,8 +50,11 @@ public class Customer {
             "EmailAddress varchar(50) NOT NULL, " + 
             "PhoneNumber varchar(13) NULL " + 
             "OrderIDs integer NULL " +
-            "PRIMARY KEY (CustomerID))";
-            stmt = Connection_DB.dbCon.createStatement();
+            "PRIMARY KEY (CustomerID), " + 
+            "FOREIGN KEY (BillAddress) REFERENCES FEARSOME_ADDRESS (AddressID), " + 
+            "FOREIGN KEY (ShipAddress) REFERENCES FEARSOME_ADDRESS (AddressID), " + 
+            "FOREIGN KEY (OrderIDs) REFERENCES FEARSOME_ORDERS (OrderID)) ";
+            stmt = sqlConn.createStatement();
             stmt.executeUpdate(createString);
         } catch (java.sql.SQLException e) {
             throw new TableException("Unable to create " + CUSTOMER_TABLE_NAME + "\nDetaill: " + e);
@@ -53,18 +63,18 @@ public class Customer {
     
 /**
  * @author Bella Belova
- * @param CustomerID A unique Customer ID
- * @param FirstName Customer First Name
- * @param LastName Customer Last Name
+ * @param CustomerID A unique Customer_Table ID
+ * @param FirstName Customer_Table First Name
+ * @param LastName Customer_Table Last Name
  * @param BillAddress An integer that except "0" or "1" for checked or unchecked Billing Address
  * @param ShipAddress An integer that except "0" or "1" for checked or unchecked Shipping Address
- * @param EmailAddress Customer EMail Address
+ * @param EmailAddress Customer_Table EMail Address
  * @param PhoneNumber Varchar field that will except parenthesis and numbers
  * @param OrderIDs Order Number
  * @throws TableException This exception represents a problem with the access and updating of the DB table.
  */
     
-    //Insert Customer data
+    //Insert Customer_Table data
     public static void createCustomer(int Cust_ID, String FName, String LName, int BillAddr, 
                                         int ShipAddr, String EMail, String PhNbr, int OrderNbr) 
         throws TableException{
@@ -77,7 +87,7 @@ public class Customer {
                   + "EmailAddress, PhoneNumber, OrderIDs) VALUES(" +
                     Cust_ID + ", '" + FName + "', '" + LName + "', '" + BillAddr + ", " + 
                     ShipAddr + ", '" + EMail + "', " + PhNbr + ", " + OrderNbr + ");" ;
-          stmt = Connection_DB.dbCon.createStatement();
+          stmt = sqlConn.createStatement();
           stmt.executeUpdate(createString);  
         } catch (java.sql.SQLException e) {
             throw new TableException("Unable to create a new Customer in the Database." + "\nDetaill: " + e);
@@ -96,7 +106,7 @@ public class Customer {
         
         try{
           String createString = "select * from " + CUSTOMER_TABLE_NAME + " where LastName like '%" + LAST_NAME + "%';" ;                
-          stmt = Connection_DB.dbCon.createStatement();
+          stmt = sqlConn.createStatement();
           rs = stmt.executeQuery(createString);  
           results = new java.util.ArrayList();
             while (rs.next() == true)
