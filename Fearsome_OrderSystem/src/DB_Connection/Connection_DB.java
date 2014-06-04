@@ -10,7 +10,7 @@ import java.io.InputStreamReader;
 
 /**
  *
- * @author Gregory
+ * @author Benny
  */
 public class Connection_DB {
 
@@ -37,7 +37,7 @@ public class Connection_DB {
     }
 
 
-            public static void main(String[] args) {
+            public static void main(String[] args) throws IOException {
         initialize();
          Menu selection = new Menu();
         
@@ -49,23 +49,32 @@ public class Connection_DB {
         {
            
             
-            while (!"4".equals(selection.Choice()))
+            while (!"5".equals(selection.Choice()))
             {
                 
             
-            if("4".equals(selection.Choice()))         // user enters "4"
+            if("5".equals(selection.Choice()))         // user enters "5"
                 continue;
             
-            System.out.print ("Welcome to Olympic Store\n\n\n\n\n");
-            System.out.print ("Please make a Selection, just type in number\n\n\n\n\n");            
+            System.out.print ("Hello James, Welcome to Olympic Store\n\n\n\n\n");
+            
+            System.out.print ("Please make a Selection, just type in number please \n\n\n\n\n"); 
+            
             System.out.print ("Would you like: \n\n");
+            
             System.out.print ("1.Login\n\n");
-            System.out.print ("2.Place Order \n\n");
-            System.out.print ("3.Update / Modify Order \n\n");
-            System.out.print ("4.Exit \n\n");
+            
+            System.out.print ("2.view Catalog \n\n");
+             
+            System.out.print ("3.view Cart \n\n");
+            
+            System.out.print ("4.Update / Modify Order \n\n");
+            
+            System.out.print ("5.Exit \n\n");
+            
                       selection.readSelection( brin.readLine());
-                      // user enters "4"
-                if("4".equals(selection.Choice()))        
+                      // user enters "5"
+                if("5".equals(selection.Choice()))        
                     continue;
             
             }
@@ -73,8 +82,8 @@ public class Connection_DB {
 catch (IOException | NumberFormatException e) 
             {
                 System.out.println ("Error:" + e);
-            }       // end catch
+            }}       // end catch
         
-    
+}
    
         
