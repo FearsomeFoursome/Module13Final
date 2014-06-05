@@ -11,8 +11,8 @@ package Create_Tables;
  */
 public class Customer_Table {
     
-    private static final String CUSTOMER_TABLE_NAME = "FEARSOME_CUSTOMERS";
-    private static java.sql.Connection sqlConn;
+    public static final String CUSTOMER_TABLE_NAME = "FEFO_CUSTOMERS";
+    public static java.sql.Connection sqlConn;
     public static class TableException extends Exception{
         TableException(String s){
             super(s);
@@ -28,7 +28,7 @@ public class Customer_Table {
     static void reset()throws TableException{
         String createString;    
         java.sql.Statement stmt;
-        /*
+        
         try{      
             createString = "drop table " + CUSTOMER_TABLE_NAME + ";";
             stmt = sqlConn.createStatement();
@@ -37,7 +37,7 @@ public class Customer_Table {
              if (!(e.getMessage().contains("Unknown")))
                 System.err.println(e); 
         }
-       */
+       
         try{
             //Create the CUSTOMER Table
             createString =
@@ -48,8 +48,8 @@ public class Customer_Table {
             "BillAddress integer NOT NULL, " + 
             "ShipAddress integer NOT NULL, " + 
             "EmailAddress varchar(50) NOT NULL, " + 
-            "PhoneNumber varchar(13) NULL " + 
-            "OrderIDs integer NULL " +
+            "PhoneNumber varchar(13) NULL, " + 
+            "OrderIDs integer NULL, " +
             "PRIMARY KEY (CustomerID), " + 
             "FOREIGN KEY (BillAddress) REFERENCES FEARSOME_ADDRESS (AddressID), " + 
             "FOREIGN KEY (ShipAddress) REFERENCES FEARSOME_ADDRESS (AddressID), " + 
@@ -69,7 +69,7 @@ public class Customer_Table {
  * @param BillAddress An integer that except "0" or "1" for checked or unchecked Billing Address
  * @param ShipAddress An integer that except "0" or "1" for checked or unchecked Shipping Address
  * @param EmailAddress Customer_Table EMail Address
- * @param PhoneNumber Varchar field that will except parenthesis and numbers
+ * @param PhoneNumber String field that will except parenthesis and numbers
  * @param OrderIDs Order Number
  * @throws TableException This exception represents a problem with the access and updating of the DB table.
  */
@@ -93,33 +93,4 @@ public class Customer_Table {
             throw new TableException("Unable to create a new Customer in the Database." + "\nDetaill: " + e);
         }
     }
-
-    
-    // Search table data
-    public static java.util.ArrayList searchbyLASTNAME(String LAST_NAME)
-            throws TableException{
-        int id; String fn; String ln;
-        java.sql.Statement stmt;
-        Object p = null;
-        java.util.ArrayList results = null;
-        java.sql.ResultSet rs = null;
-        
-        try{
-          String createString = "select * from " + CUSTOMER_TABLE_NAME + " where LastName like '%" + LAST_NAME + "%';" ;                
-          stmt = sqlConn.createStatement();
-          rs = stmt.executeQuery(createString);  
-          results = new java.util.ArrayList();
-            while (rs.next() == true)
-                results.add(new OrderSystem_Classes.Customer (rs.getInt("CustomerID"), rs.getString("FirstName"), 
-                        rs.getString("LastName"), rs.getInt("BillAddress"), rs.getInt("ShipAddress"), 
-                        rs.getString("EmailAddress"), rs.getString("PhoneNumber"), rs.getInt("OrderIDs")));  
-        }catch (java.sql.SQLException e){
-            throw new TableException("Unable to search Customer Database." + "\nDetaill: " + e);
-        }
-        return results;
-    }
-
-
-
-    
 }

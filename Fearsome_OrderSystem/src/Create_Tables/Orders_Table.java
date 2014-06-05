@@ -10,8 +10,8 @@ package Create_Tables;
  */
 public class Orders_Table {
     
-    private static final String ORDERS_TABLE_NAME = "FEARSOME_ORDERS";   
-    private static java.sql.Connection sqlConn;
+    public static final String ORDERS_TABLE_NAME = "FEFO_ORDERS";   
+    public static java.sql.Connection sqlConn;
     public static class TableException extends Exception{
         TableException(String s){
             super(s);
@@ -28,7 +28,7 @@ public class Orders_Table {
     static void reset()throws TableException{
         String createString;    
         java.sql.Statement stmt;
-        /*
+        
         try{      
             createString = "drop table " + ORDERS_TABLE_NAME + ";";
             stmt = sqlConn.createStatement();
@@ -37,7 +37,7 @@ public class Orders_Table {
              if (!(e.getMessage().contains("Unknown")))
                 System.err.println(e); 
         }
-        */
+        
         try{
             //Create the CUSTOMER Table
             createString =
@@ -72,28 +72,6 @@ public class Orders_Table {
     }
 
     
-    // Search table data
-    public static java.util.ArrayList searchbyOrder(int Order_ID)
-            throws TableException{
-        int id; String fn; String ln;
-        java.sql.Statement stmt;
-        Object p = null;
-        java.util.ArrayList results = null;
-        java.sql.ResultSet rs = null;
-        
-        try{
-          String createString = "select * from " + ORDERS_TABLE_NAME + " where OrderID like %" + Order_ID + "%;" ;                
-          stmt = sqlConn.createStatement();
-          rs = stmt.executeQuery(createString);  
-          results = new java.util.ArrayList();
-            while (rs.next() == true)
-                results.add(new OrderSystem_Classes.Orders (rs.getInt("Order_ID"), rs.getInt("CustomerID"), 
-                        rs.getString("Financial"), rs.getString("OrderDate")));  
-        }catch (java.sql.SQLException e){
-            throw new TableException("Unable to search Order Database." + "\nDetaill: " + e);
-        }
-        return results;
-    }
 
 
     

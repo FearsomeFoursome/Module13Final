@@ -8,17 +8,21 @@ package OrderSystem_Classes;
  *
  * @author Gregory
  */
-public class Inventory {
+public class Stock_Items {
     
     private int ProductID;
-    private int QuantatyInStock;
+    private String ProductName;
+    private int StockQuantity;
+
+    
     
     // Constructor
     
-    public Inventory (int ProdID, int QtyInStock) {
+    public Stock_Items (int ProdID, String ProdName, int StockQty) {
         
         ProductID = ProdID;
-        QuantatyInStock = QtyInStock;
+        ProductName = ProdName;
+        StockQuantity = StockQty;
     }
     
 }

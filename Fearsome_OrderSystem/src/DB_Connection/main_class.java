@@ -5,6 +5,7 @@
 package DB_Connection;
 
 import java.io.IOException;
+import Msg_Displays.*;
 
 /**
  *
@@ -14,9 +15,9 @@ public class main_class {
 
     public static void main(String[] argv) throws IOException
     {
-        Msg_Displays.Menu_Show main_menu = new Msg_Displays.Menu_Show();
+        MenuShow main_menu = new MenuShow();
         
-        main_menu.get_selection();
+        main_menu.MenuRun();
         
     }
 }

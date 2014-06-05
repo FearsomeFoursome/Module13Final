@@ -10,8 +10,8 @@ package Create_Tables;
  */
 public class Items_Table {
     
-    private static final String ITEMS_TABLE_NAME = "FEARSOME_ITEMS";   
-    private static java.sql.Connection sqlConn;
+    public static final String ITEMS_TABLE_NAME = "FEFO_ITEMS";   
+    public static java.sql.Connection sqlConn;
     public static class TableException extends Exception{
         TableException(String s){
             super(s);
@@ -28,7 +28,7 @@ public class Items_Table {
     static void reset()throws TableException{
         String createString;    
         java.sql.Statement stmt;
-        /*
+        
         try{      
             createString = "drop table " + ITEMS_TABLE_NAME + ";";
             stmt = sqlConn.createStatement();
@@ -37,7 +37,7 @@ public class Items_Table {
              if (!(e.getMessage().contains("Unknown")))
                 System.err.println(e); 
         }
-        */
+        
         try{
             //Create the Items_Table Table
             createString =
@@ -47,7 +47,7 @@ public class Items_Table {
             "ProductID integer NOT NULL, " +
             "Quantaty integer NOT NULL, " +
             "PRIMARY KEY (OrderItemID), " +
-            "FOREIGN KEY (OrderID) REFERENCE FEARSOME_ORDERS (OrderID)) ";
+            "FOREIGN KEY (OrderID) REFERENCE FEFO_ORDERS (OrderID)) ";
             stmt = sqlConn.createStatement();
             stmt.executeUpdate(createString);
         } catch (java.sql.SQLException e) {
@@ -74,31 +74,10 @@ public class Items_Table {
     }
 
     
-    // Search table data
-    public static java.util.ArrayList searchbyItemID(int Item_ID)
-            throws TableException{
-        int id; String fn; String ln;
-        java.sql.Statement stmt;
-        Object p = null;
-        java.util.ArrayList results = null;
-        java.sql.ResultSet rs = null;
-        
-        try{
-          String createString = "select * from " + ITEMS_TABLE_NAME + " where Order_Item_ID like %" + Item_ID + "%;" ;                
-          stmt = sqlConn.createStatement();
-          rs = stmt.executeQuery(createString);  
-          results = new java.util.ArrayList();
-            while (rs.next() == true)
-                results.add(new OrderSystem_Classes.Items (rs.getInt("Order_Item_ID"), rs.getInt("OrderID"), 
-                        rs.getInt("ProductID"), rs.getInt("Quantaty")));  
-        }catch (java.sql.SQLException e){
-            throw new TableException("Unable to search Item Database." + "\nDetaill: " + e);
-        }
-        return results;
+    
     }
 
 
     
     
     
-}

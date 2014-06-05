@@ -4,14 +4,13 @@
  */
 package Create_Tables;
 
-
 /**
  *
  * @author Gregory
  */
-public class Product_Table {
+public class Stock_Items_Table {
     
-    public static final String PRODUCT_TABLE_NAME = "FEFO_PRODUCTS";
+    public static final String STOCK_ITEMS_TABLE_NAME = "FEFO_STOCK_ITEMS";
     public static java.sql.Connection mysqlConn;
     public static class TableException extends Exception{
         TableException(String s){
@@ -19,20 +18,20 @@ public class Product_Table {
         }
     }
     
-    public Product_Table()
+    public Stock_Items_Table()
     {
         mysqlConn = Connect.MYSQL.getMSQLConn();
     }
     
     
-        // Drop Table
+    // Drop Table
     
         static void reset()throws TableException{
         String createString;    
         java.sql.Statement stmt;
         
         try{      
-            createString = "drop table " + PRODUCT_TABLE_NAME + ";";
+            createString = "drop table " + STOCK_ITEMS_TABLE_NAME + ";";
             stmt = mysqlConn.createStatement();
             stmt.executeUpdate(createString);
          } catch (java.sql.SQLException e) {
@@ -43,31 +42,27 @@ public class Product_Table {
         try{
             //Create the CUSTOMER Table
             createString =
-            "create table " + PRODUCT_TABLE_NAME + " " + 
-            "(PROD_ID integer NOT NULL, " + 
-            "CATEGORY_ID integer NOT NULL, " +
-            "PROD_NAME varchar(40) NOT NULL, " +
-            "PROD_DESC varchar(40) NOT NULL, " +
-            "PROD_PRICE float NOT NULL, " + 
-            "PRIMARY KEY (PROD_ID)), " + 
-            "FOREIGN KEY (PROD_ID) REFERENCE FEFO_STOCK_ITEMS (PROD_ID))";
+            "create table " + STOCK_ITEMS_TABLE_NAME + " " + 
+            "(PROD_ID integer NOT NULL, " +
+            "PROD_NAME varchar(40) NULL, " +
+            "STOCK_QTY integer NOT NULL, " +
+            "PRIMARY KEY (PROD_ID))";
             stmt = mysqlConn.createStatement();
             stmt.executeUpdate(createString);
         } catch (java.sql.SQLException e) {
-            throw new TableException("Unable to create " + PRODUCT_TABLE_NAME + "\nDetaill: " + e);
+            throw new TableException("Unable to create " + STOCK_ITEMS_TABLE_NAME + "\nDetaill: " + e);
         }        
     }
 
             //Insert Items data
-    public static void createOrder(int Prod_ID, int Categ_ID, String Prod_Name, String Prod_Desc, float Prod_Price) 
+    public static void createOrder(int Prod_ID, String Prod_Name, int Stock_QTY) 
         throws TableException{
     
     java.sql.Statement stmt;
         try{
 
-          String createString = "insert into " + PRODUCT_TABLE_NAME + 
-                  " (PROD_ID, CATEGORY_ID, PROD_NAME, PROD_DESC, PROD_PRICE ) VALUES(" + Prod_ID + ", " + 
-                  Categ_ID + ", '" + Prod_Name + "', '" + Prod_Desc  + "', " + Prod_Price + " );" ;
+          String createString = "insert into " + STOCK_ITEMS_TABLE_NAME + 
+                  " (PROD_ID, PROD_NAME, STOCK_QTY ) VALUES(" + Prod_ID + ", '" + Prod_Name + "', " + Stock_QTY  + " );" ;
           stmt = mysqlConn.createStatement();
           stmt.executeUpdate(createString);  
         } catch (java.sql.SQLException e) {
@@ -75,4 +70,9 @@ public class Product_Table {
         }
     }
 
+    
+ 
+
+
+    
 }
