@@ -4,6 +4,7 @@
  */
 package Create_Tables;
 
+import Connect.*;
 import DB_Connection.Order_Queries;
 
 /**
@@ -14,6 +15,7 @@ public class Orders_Table {
     
     public static final String ORDERS_TABLE_NAME = "FEFO_ORDERS";   
     public static java.sql.Connection sqlConn;
+    SQL sql_access;
     public static class TableException extends Exception{
         TableException(String s){
             super(s);
@@ -22,6 +24,7 @@ public class Orders_Table {
     
     public Orders_Table()
     {
+        sql_access = new SQL();
         sqlConn = Connect.SQL.getSQLConn();
     }
     
@@ -63,7 +66,7 @@ public class Orders_Table {
     java.sql.Statement stmt;
         try{
 
-          String createString = "insert into " + ORDERS_TABLE_NAME + 
+          String createString = "SET IDENTITY_INSERT " + ORDERS_TABLE_NAME + " on insert into " + ORDERS_TABLE_NAME + 
                   " (OrderID, CustomerID, Financial, OrderDate ) VALUES(" + Ord_ID + ", "
                    + Cust_ID + ", '" + Fin + "', '" + Ord_Date  + "' );" ;
           stmt = sqlConn.createStatement();

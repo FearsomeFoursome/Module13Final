@@ -6,6 +6,7 @@ package Create_Tables;
 
 import static Create_Tables.Address_Table.ADDRESS_TABLE_NAME;
 import static Create_Tables.Address_Table.sqlConn;
+import  Connect.*;
 
 
 /**
@@ -16,6 +17,7 @@ public class Customer_Table {
     
     public static final String CUSTOMER_TABLE_NAME = "FEFO_CUSTOMERS";
     public static java.sql.Connection sqlConn;
+    SQL sql_access;
     public static class TableException extends Exception{
         TableException(String s){
             super(s);
@@ -24,6 +26,7 @@ public class Customer_Table {
     
     public Customer_Table()
     {
+        sql_access = new SQL();
         sqlConn = Connect.SQL.getSQLConn();
     }
     // Drop Table
@@ -88,11 +91,11 @@ public class Customer_Table {
     java.sql.Statement stmt;
         try{
 
-          String createString = "insert into " + CUSTOMER_TABLE_NAME + 
+          String createString = "SET IDENTITY_INSERT " + CUSTOMER_TABLE_NAME + " on insert into " + CUSTOMER_TABLE_NAME + 
                   " (CustomerID, FirstName, LastName, BillAddress, ShipAddress, "
                   + "EmailAddress, PhoneNumber, OrderIDs) VALUES(" +
-                    Cust_ID + ", '" + FName + "', '" + LName + "', '" + BillAddr + ", " + 
-                    ShipAddr + ", '" + EMail + "', " + PhNbr + ", " + OrderNbr + ");" ;
+                    Cust_ID + ", '" + FName + "', '" + LName + "', " + BillAddr + ", " + 
+                    ShipAddr + ", '" + EMail + "', '" + PhNbr + "', " + OrderNbr + ");" ;
           stmt = sqlConn.createStatement();
           stmt.executeUpdate(createString);  
         } catch (java.sql.SQLException e) {

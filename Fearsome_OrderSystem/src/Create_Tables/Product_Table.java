@@ -4,6 +4,7 @@
  */
 package Create_Tables;
 
+import Connect.*;
 import DB_Connection.Product_Queries;
 
 
@@ -15,6 +16,7 @@ public class Product_Table {
     
     public static final String PRODUCT_TABLE_NAME = "FEFO_PRODUCTS";
     public static java.sql.Connection mysqlConn;
+    MYSQL mysql_access;    
     public static class TableException extends Exception{
         TableException(String s){
             super(s);
@@ -23,6 +25,7 @@ public class Product_Table {
     
     public Product_Table()
     {
+        mysql_access = new MYSQL();
         mysqlConn = Connect.MYSQL.getMSQLConn();
     }
     
@@ -32,7 +35,7 @@ public class Product_Table {
     public void reset()throws TableException{
         String createString;    
         java.sql.Statement stmt;
-/*        
+        
         try{      
             createString = "drop table " + PRODUCT_TABLE_NAME + ";";
             stmt = mysqlConn.createStatement();
@@ -41,7 +44,7 @@ public class Product_Table {
              if (!(e.getMessage().contains("Unknown")))
                 System.err.println(e); 
         }
- */       
+        
         try{
             //Create the CUSTOMER Table
             createString =

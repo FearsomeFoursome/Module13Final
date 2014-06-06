@@ -4,6 +4,7 @@
  */
 package Create_Tables;
 
+import Connect.*;
 import DB_Connection.Stock_Items_Queries;
 
 /**
@@ -14,6 +15,7 @@ public class Stock_Items_Table {
     
     public static final String STOCK_ITEMS_TABLE_NAME = "FEFO_STOCK_ITEMS";
     public static java.sql.Connection mysqlConn;
+    MYSQL mysql_access;
     public static class TableException extends Exception{
         TableException(String s){
             super(s);
@@ -22,6 +24,7 @@ public class Stock_Items_Table {
     
     public Stock_Items_Table()
     {
+        mysql_access = new MYSQL();
         mysqlConn = Connect.MYSQL.getMSQLConn();
     }
     
@@ -31,7 +34,7 @@ public class Stock_Items_Table {
     public void reset()throws TableException{
         String createString;    
         java.sql.Statement stmt;
-/*        
+        
         try{      
             createString = "drop table " + STOCK_ITEMS_TABLE_NAME + ";";
             stmt = mysqlConn.createStatement();
@@ -40,9 +43,9 @@ public class Stock_Items_Table {
              if (!(e.getMessage().contains("Unknown")))
                 System.err.println(e); 
         }
-*/        
+        
         try{
-            //Create the CUSTOMER Table
+            //Create the Stock Items Table
             createString =
             "create table " + STOCK_ITEMS_TABLE_NAME + " " + 
             "(PROD_ID integer NOT NULL, " +

@@ -4,16 +4,18 @@
  */
 package Create_Tables;
 
+import Connect.*;
 import DB_Connection.Item_Queries;
 
 /**
  *
- * @author Gregory
+ * @author Bella Belova
  */
 public class Items_Table {
     
     public static final String ITEMS_TABLE_NAME = "FEFO_ITEMS";   
     public static java.sql.Connection sqlConn;
+    SQL sql_access;
     public static class TableException extends Exception{
         TableException(String s){
             super(s);
@@ -22,6 +24,7 @@ public class Items_Table {
     
     public Items_Table()
     {
+        sql_access = new SQL();
         sqlConn = Connect.SQL.getSQLConn();
     }
     
@@ -65,7 +68,7 @@ public class Items_Table {
     java.sql.Statement stmt;
         try{
 
-          String createString = "insert into " + ITEMS_TABLE_NAME + 
+          String createString = "SET IDENTITY_INSERT " + ITEMS_TABLE_NAME + " on insert into " + ITEMS_TABLE_NAME + 
                   " (OrderItemID, OrderID, ProductID, Quantaty ) VALUES(" + Ord_Item_ID + ", "
                    + Ord_ID + ", " + Prod_ID + ", " + QTY  + " );" ;
           stmt = sqlConn.createStatement();

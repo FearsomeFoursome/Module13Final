@@ -4,6 +4,8 @@
  */
 package Create_Tables;
 
+import Connect.*;
+
 
 
 /**
@@ -14,6 +16,7 @@ public class Address_Table {
     
     public static final String ADDRESS_TABLE_NAME = "FEFO_ADDRESS";  
     public static java.sql.Connection sqlConn;
+    SQL sql_access;
     public static class TableException extends Exception{
         TableException(String s){
             super(s);
@@ -22,6 +25,7 @@ public class Address_Table {
     
     public Address_Table()
     {
+        sql_access = new SQL();
         sqlConn = Connect.SQL.getSQLConn();
     }
     
@@ -69,10 +73,10 @@ public class Address_Table {
     java.sql.Statement stmt;
         try{
 
-          String createString = "insert into " + ADDRESS_TABLE_NAME + 
+          String createString = "SET IDENTITY_INSERT " + ADDRESS_TABLE_NAME + " on insert into " + ADDRESS_TABLE_NAME + 
                   " (AddressID, CustomerID, AddressType, Address1, Address2, "
-                  + "City, State, Zip) VALUES(" + Addr_ID + 
-                    Cust_ID + ", '" + Addr_Type + "', '" + Addr1 + "', '" + Addr2 + "', " + 
+                  + "City, State, Zip) VALUES(" + Addr_ID + ", " + 
+                    Cust_ID + ", '" + Addr_Type + "', '" + Addr1 + "', '" + Addr2 + "', '" + 
                     Addr_City + "', '" + Addr_State + "', " + Addr_Zip + ");" ;
           stmt = sqlConn.createStatement();
           stmt.executeUpdate(createString);  

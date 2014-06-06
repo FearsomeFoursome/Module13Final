@@ -87,7 +87,7 @@ public class DataLoad {
             {
                 System.out.println(results.get(index));
             }
-        }catch (Exception Orders){                    // Renamed "e" to "Customer" for clearly define where the error is
+        }catch (Exception Orders){                    // Renamed "e" to "Order" for clearly define where the error is
             System.err.println(Orders);
         }
 
@@ -103,7 +103,7 @@ public class DataLoad {
             {
                 System.out.println(results.get(index));
             }
-        }catch (Exception Items){                    // Renamed "e" to "Customer" for clearly define where the error is
+        }catch (Exception Items){                    // Renamed "e" to "Order Items" for clearly define where the error is
             System.err.println(Items);
         }
 
@@ -119,7 +119,7 @@ public class DataLoad {
             {
                 System.out.println(results.get(index));
             }
-        }catch (Exception Stocks){                    // Renamed "e" to "Customer" for clearly define where the error is
+        }catch (Exception Stocks){                    // Renamed "e" to "Stock Items" for clearly define where the error is
             System.err.println(Stocks);
         }
  
