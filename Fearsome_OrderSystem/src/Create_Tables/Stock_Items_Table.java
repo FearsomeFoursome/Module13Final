@@ -5,39 +5,38 @@
 package Create_Tables;
 
 import Connect.*;
-import DB_Connection.Product_Queries;
-
+import DB_Connection.Stock_Items_Queries;
 
 /**
  *
  * @author Gregory
  */
-public class Product_Table {
+public class Stock_Items_Table {
     
-    public static final String PRODUCT_TABLE_NAME = "FEFO_PRODUCTS";
+    public static final String STOCK_ITEMS_TABLE_NAME = "FEFO_STOCK_ITEMS";
     public static java.sql.Connection mysqlConn;
-    MYSQL mysql_access;    
+    MYSQL mysql_access;
     public static class TableException extends Exception{
         TableException(String s){
             super(s);
         }
     }
     
-    public Product_Table()
+    public Stock_Items_Table()
     {
         mysql_access = new MYSQL();
         mysqlConn = Connect.MYSQL.getMSQLConn();
     }
     
-   
-        // Drop Table
+    
+    // Drop Table
     
     public void reset()throws TableException{
         String createString;    
         java.sql.Statement stmt;
         
         try{      
-            createString = "drop table " + PRODUCT_TABLE_NAME + ";";
+            createString = "drop table " + STOCK_ITEMS_TABLE_NAME + ";";
             stmt = mysqlConn.createStatement();
             stmt.executeUpdate(createString);
          } catch (java.sql.SQLException e) {
@@ -46,42 +45,37 @@ public class Product_Table {
         }
         
         try{
-            //Create the CUSTOMER Table
+            //Create the Stock Items Table
             createString =
-            "create table " + PRODUCT_TABLE_NAME + " " + 
-            "(PROD_ID integer NOT NULL, " + 
-            "CATEGORY_ID integer NOT NULL, " +
-            "PROD_NAME varchar(40) NOT NULL, " +
-            "PROD_DESC varchar(40) NOT NULL, " +
-            "PROD_PRICE float NOT NULL, " + 
-            "PRIMARY KEY (PROD_ID), " + 
-            "FOREIGN KEY (PROD_ID) REFERENCES FEFO_STOCK_ITEMS (PROD_ID))";
+            "create table " + STOCK_ITEMS_TABLE_NAME + " " + 
+            "(PROD_ID integer NOT NULL, " +
+            "PROD_NAME varchar(40) NULL, " +
+            "STOCK_QTY integer NOT NULL, " +
+            "PRIMARY KEY (PROD_ID))";
             stmt = mysqlConn.createStatement();
             stmt.executeUpdate(createString);
         } catch (java.sql.SQLException e) {
-            throw new TableException("Unable to create " + PRODUCT_TABLE_NAME + "\nDetaill: " + e);
+            throw new TableException("Unable to create " + STOCK_ITEMS_TABLE_NAME + "\nDetaill: " + e);
         }        
     }
 
             //Insert Items data
-    public void createOrder(int Prod_ID, int Categ_ID, String Prod_Name, String Prod_Desc, float Prod_Price) 
+    public void createOrder(int Prod_ID, String Prod_Name, int Stock_QTY) 
         throws TableException{
     
     java.sql.Statement stmt;
         try{
 
-          String createString = "insert into " + PRODUCT_TABLE_NAME + 
-                  " (PROD_ID, CATEGORY_ID, PROD_NAME, PROD_DESC, PROD_PRICE ) VALUES(" + Prod_ID + ", " + 
-                  Categ_ID + ", '" + Prod_Name + "', '" + Prod_Desc  + "', " + Prod_Price + " );" ;
+          String createString = "insert into " + STOCK_ITEMS_TABLE_NAME + 
+                  " (PROD_ID, PROD_NAME, STOCK_QTY ) VALUES(" + Prod_ID + ", '" + Prod_Name + "', " + Stock_QTY  + " );" ;
           stmt = mysqlConn.createStatement();
           stmt.executeUpdate(createString);  
         } catch (java.sql.SQLException e) {
             throw new TableException("Unable to create a new Order in the Database." + "\nDetaill: " + e);
         }
     }
-    
-        public  java.util.ArrayList getAllProducts()
-            throws Product_Queries.TableException, TableException{
+        public java.util.ArrayList getAllStocks()
+            throws Stock_Items_Queries.TableException, TableException{
         int id; String fn; String ln;
         java.sql.Statement stmt;
         Object p = null;
@@ -89,18 +83,22 @@ public class Product_Table {
         java.sql.ResultSet rs = null;
         
         try{
-          String createString = "select * from " + PRODUCT_TABLE_NAME + " ;" ;                
+          String createString = "select * from " + STOCK_ITEMS_TABLE_NAME + ";" ;                
           stmt = mysqlConn.createStatement();
           rs = stmt.executeQuery(createString);  
           results = new java.util.ArrayList();
             while (rs.next() == true)
-                results.add(new OrderSystem_Classes.Products (rs.getInt("PROD_ID"), rs.getInt("CATEGORY_ID"), 
-                        rs.getString("PROD_NAME"), rs.getString("PROD_DESC"), rs.getInt("PROD_PRICE")));  
+                results.add(new OrderSystem_Classes.Stock_Items (rs.getInt("PROD_ID"), rs.getString("PROD_NAME"), 
+                        rs.getInt("STOCK_QTY")));  
         }catch (java.sql.SQLException e){
-            throw new TableException("Unable to search Product Table." + "\nDetaill: " + e);
+            throw new TableException("Unable to search Quantity in Stock_Items Table." + "\nDetaill: " + e);
         }
-        return results;        
+        return results;
     }
 
+    
+ 
 
+
+    
 }

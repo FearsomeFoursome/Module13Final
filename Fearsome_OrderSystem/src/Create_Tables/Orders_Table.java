@@ -4,14 +4,18 @@
  */
 package Create_Tables;
 
+import Connect.*;
+import DB_Connection.Order_Queries;
+
 /**
  *
  * @author Gregory
  */
 public class Orders_Table {
     
-    private static final String ORDERS_TABLE_NAME = "FEARSOME_ORDERS";   
-    private static java.sql.Connection sqlConn;
+    public static final String ORDERS_TABLE_NAME = "FEFO_ORDERS";   
+    public static java.sql.Connection sqlConn;
+    SQL sql_access;
     public static class TableException extends Exception{
         TableException(String s){
             super(s);
@@ -20,15 +24,16 @@ public class Orders_Table {
     
     public Orders_Table()
     {
+        sql_access = new SQL();
         sqlConn = Connect.SQL.getSQLConn();
     }
     
     // Drop Table
     
-    static void reset()throws TableException{
+    public void reset()throws TableException{
         String createString;    
         java.sql.Statement stmt;
-        /*
+        
         try{      
             createString = "drop table " + ORDERS_TABLE_NAME + ";";
             stmt = sqlConn.createStatement();
@@ -37,7 +42,7 @@ public class Orders_Table {
              if (!(e.getMessage().contains("Unknown")))
                 System.err.println(e); 
         }
-        */
+        
         try{
             //Create the CUSTOMER Table
             createString =
@@ -55,13 +60,13 @@ public class Orders_Table {
     }
 
             //Insert Items data
-    public static void createOrder(int Ord_ID, int Cust_ID, String Fin, String Ord_Date) 
+    public void createOrder(int Ord_ID, int Cust_ID, String Fin, String Ord_Date) 
         throws TableException{
     
     java.sql.Statement stmt;
         try{
 
-          String createString = "insert into " + ORDERS_TABLE_NAME + 
+          String createString = "SET IDENTITY_INSERT " + ORDERS_TABLE_NAME + " on insert into " + ORDERS_TABLE_NAME + 
                   " (OrderID, CustomerID, Financial, OrderDate ) VALUES(" + Ord_ID + ", "
                    + Cust_ID + ", '" + Fin + "', '" + Ord_Date  + "' );" ;
           stmt = sqlConn.createStatement();
@@ -70,11 +75,9 @@ public class Orders_Table {
             throw new TableException("Unable to create a new Order in the Database." + "\nDetaill: " + e);
         }
     }
-
     
-    // Search table data
-    public static java.util.ArrayList searchbyOrder(int Order_ID)
-            throws TableException{
+        public static java.util.ArrayList getAllOrders()
+            throws Order_Queries.TableException, TableException{
         int id; String fn; String ln;
         java.sql.Statement stmt;
         Object p = null;
@@ -82,7 +85,7 @@ public class Orders_Table {
         java.sql.ResultSet rs = null;
         
         try{
-          String createString = "select * from " + ORDERS_TABLE_NAME + " where OrderID like %" + Order_ID + "%;" ;                
+          String createString = "select * from " + ORDERS_TABLE_NAME + ";" ;                
           stmt = sqlConn.createStatement();
           rs = stmt.executeQuery(createString);  
           results = new java.util.ArrayList();
@@ -93,9 +96,5 @@ public class Orders_Table {
             throw new TableException("Unable to search Order Database." + "\nDetaill: " + e);
         }
         return results;
-    }
-
-
-    
-    
+    }    
 }

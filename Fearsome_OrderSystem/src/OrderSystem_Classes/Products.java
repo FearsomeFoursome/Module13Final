@@ -11,19 +11,22 @@ package OrderSystem_Classes;
 public class Products {
     
     private int ProductID;
+    private int Category_ID;
     private String ProductName;
     private String ProductDescription;
-    private int Weight;
-    private double Price;
+    private float Price;
+
     
+
+
     // Constructor
     
-    public Products (int ProdID, String ProdName, String ProdDesc, int ProdWeight, double ProdPrice) {
+    public Products (int ProdID, int CategID, String ProdName, String ProdDesc, float ProdPrice) {
         
         ProductID = ProdID;
         ProductName = ProdName;
         ProductDescription = ProdDesc;
-        Weight = ProdWeight;
+        ProductDescription = ProdDesc;
         Price = ProdPrice;
     }
 }

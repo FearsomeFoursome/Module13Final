@@ -4,6 +4,10 @@
  */
 package Create_Tables;
 
+import static Create_Tables.Address_Table.ADDRESS_TABLE_NAME;
+import static Create_Tables.Address_Table.sqlConn;
+import  Connect.*;
+
 
 /**
  *
@@ -11,8 +15,9 @@ package Create_Tables;
  */
 public class Customer_Table {
     
-    private static final String CUSTOMER_TABLE_NAME = "FEARSOME_CUSTOMERS";
-    private static java.sql.Connection sqlConn;
+    public static final String CUSTOMER_TABLE_NAME = "FEFO_CUSTOMERS";
+    public static java.sql.Connection sqlConn;
+    SQL sql_access;
     public static class TableException extends Exception{
         TableException(String s){
             super(s);
@@ -21,14 +26,15 @@ public class Customer_Table {
     
     public Customer_Table()
     {
+        sql_access = new SQL();
         sqlConn = Connect.SQL.getSQLConn();
     }
     // Drop Table
     
-    static void reset()throws TableException{
+    public void reset()throws TableException{
         String createString;    
         java.sql.Statement stmt;
-        /*
+        
         try{      
             createString = "drop table " + CUSTOMER_TABLE_NAME + ";";
             stmt = sqlConn.createStatement();
@@ -37,7 +43,7 @@ public class Customer_Table {
              if (!(e.getMessage().contains("Unknown")))
                 System.err.println(e); 
         }
-       */
+       
         try{
             //Create the CUSTOMER Table
             createString =
@@ -48,12 +54,15 @@ public class Customer_Table {
             "BillAddress integer NOT NULL, " + 
             "ShipAddress integer NOT NULL, " + 
             "EmailAddress varchar(50) NOT NULL, " + 
-            "PhoneNumber varchar(13) NULL " + 
-            "OrderIDs integer NULL " +
-            "PRIMARY KEY (CustomerID), " + 
+            "PhoneNumber varchar(13) NULL, " + 
+            "OrderIDs integer NULL, " +
+            "PRIMARY KEY (CustomerID))";
+/*                    
             "FOREIGN KEY (BillAddress) REFERENCES FEARSOME_ADDRESS (AddressID), " + 
             "FOREIGN KEY (ShipAddress) REFERENCES FEARSOME_ADDRESS (AddressID), " + 
             "FOREIGN KEY (OrderIDs) REFERENCES FEARSOME_ORDERS (OrderID)) ";
+            * 
+            */ 
             stmt = sqlConn.createStatement();
             stmt.executeUpdate(createString);
         } catch (java.sql.SQLException e) {
@@ -69,35 +78,33 @@ public class Customer_Table {
  * @param BillAddress An integer that except "0" or "1" for checked or unchecked Billing Address
  * @param ShipAddress An integer that except "0" or "1" for checked or unchecked Shipping Address
  * @param EmailAddress Customer_Table EMail Address
- * @param PhoneNumber Varchar field that will except parenthesis and numbers
+ * @param PhoneNumber String field that will except parenthesis and numbers
  * @param OrderIDs Order Number
  * @throws TableException This exception represents a problem with the access and updating of the DB table.
  */
     
     //Insert Customer_Table data
-    public static void createCustomer(int Cust_ID, String FName, String LName, int BillAddr, 
+    public void createCustomer(int Cust_ID, String FName, String LName, int BillAddr, 
                                         int ShipAddr, String EMail, String PhNbr, int OrderNbr) 
         throws TableException{
     
     java.sql.Statement stmt;
         try{
 
-          String createString = "insert into " + CUSTOMER_TABLE_NAME + 
+          String createString = "SET IDENTITY_INSERT " + CUSTOMER_TABLE_NAME + " on insert into " + CUSTOMER_TABLE_NAME + 
                   " (CustomerID, FirstName, LastName, BillAddress, ShipAddress, "
                   + "EmailAddress, PhoneNumber, OrderIDs) VALUES(" +
-                    Cust_ID + ", '" + FName + "', '" + LName + "', '" + BillAddr + ", " + 
-                    ShipAddr + ", '" + EMail + "', " + PhNbr + ", " + OrderNbr + ");" ;
+                    Cust_ID + ", '" + FName + "', '" + LName + "', " + BillAddr + ", " + 
+                    ShipAddr + ", '" + EMail + "', '" + PhNbr + "', " + OrderNbr + ");" ;
           stmt = sqlConn.createStatement();
           stmt.executeUpdate(createString);  
         } catch (java.sql.SQLException e) {
             throw new TableException("Unable to create a new Customer in the Database." + "\nDetaill: " + e);
         }
     }
-
     
-    // Search table data
-    public static java.util.ArrayList searchbyLASTNAME(String LAST_NAME)
-            throws TableException{
+    public static java.util.ArrayList getAllCustomers()
+            throws Address_Table.TableException, TableException{
         int id; String fn; String ln;
         java.sql.Statement stmt;
         Object p = null;
@@ -105,7 +112,7 @@ public class Customer_Table {
         java.sql.ResultSet rs = null;
         
         try{
-          String createString = "select * from " + CUSTOMER_TABLE_NAME + " where LastName like '%" + LAST_NAME + "%';" ;                
+          String createString = "select * from " + CUSTOMER_TABLE_NAME + ";" ;
           stmt = sqlConn.createStatement();
           rs = stmt.executeQuery(createString);  
           results = new java.util.ArrayList();
@@ -114,12 +121,8 @@ public class Customer_Table {
                         rs.getString("LastName"), rs.getInt("BillAddress"), rs.getInt("ShipAddress"), 
                         rs.getString("EmailAddress"), rs.getString("PhoneNumber"), rs.getInt("OrderIDs")));  
         }catch (java.sql.SQLException e){
-            throw new TableException("Unable to search Customer Database." + "\nDetaill: " + e);
+            throw new TableException("Unable to search Customer Table." + "\nDetaill: " + e);
         }
         return results;
     }
-
-
-
-    
 }
