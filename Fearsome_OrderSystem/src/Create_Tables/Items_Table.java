@@ -4,6 +4,8 @@
  */
 package Create_Tables;
 
+import DB_Connection.Item_Queries;
+
 /**
  *
  * @author Gregory
@@ -25,7 +27,7 @@ public class Items_Table {
     
     // Drop Table
     
-    static void reset()throws TableException{
+    public void reset()throws TableException{
         String createString;    
         java.sql.Statement stmt;
         
@@ -47,7 +49,7 @@ public class Items_Table {
             "ProductID integer NOT NULL, " +
             "Quantaty integer NOT NULL, " +
             "PRIMARY KEY (OrderItemID), " +
-            "FOREIGN KEY (OrderID) REFERENCE FEFO_ORDERS (OrderID)) ";
+            "FOREIGN KEY (OrderID) REFERENCES FEFO_ORDERS (OrderID)) ";
             stmt = sqlConn.createStatement();
             stmt.executeUpdate(createString);
         } catch (java.sql.SQLException e) {
@@ -57,7 +59,7 @@ public class Items_Table {
 
     
         //Insert Items_Table data
-    public static void createItems(int Ord_Item_ID, int Ord_ID, int Prod_ID, int QTY) 
+    public void createItems(int Ord_Item_ID, int Ord_ID, int Prod_ID, int QTY) 
         throws TableException{
     
     java.sql.Statement stmt;
@@ -72,10 +74,31 @@ public class Items_Table {
             throw new TableException("Unable to create a new Address in the Database." + "\nDetaill: " + e);
         }
     }
+    
+        public static java.util.ArrayList getAllItems()
+            throws Item_Queries.TableException, TableException{
+        int id; String fn; String ln;
+        java.sql.Statement stmt;
+        Object p = null;
+        java.util.ArrayList results = null;
+        java.sql.ResultSet rs = null;
+        
+        try{
+          String createString = "select * from " + ITEMS_TABLE_NAME + ";" ;                
+          stmt = sqlConn.createStatement();
+          rs = stmt.executeQuery(createString);  
+          results = new java.util.ArrayList();
+            while (rs.next() == true)
+                results.add(new OrderSystem_Classes.Items (rs.getInt("Order_Item_ID"), rs.getInt("OrderID"), 
+                        rs.getInt("ProductID"), rs.getInt("Quantaty")));  
+        }catch (java.sql.SQLException e){
+            throw new TableException("Unable to search Item Database." + "\nDetaill: " + e);
+        }
+        return results;
+    
+        }
 
-    
-    
-    }
+}
 
 
     

@@ -4,6 +4,8 @@
  */
 package Create_Tables;
 
+import DB_Connection.Order_Queries;
+
 /**
  *
  * @author Gregory
@@ -25,7 +27,7 @@ public class Orders_Table {
     
     // Drop Table
     
-    static void reset()throws TableException{
+    public void reset()throws TableException{
         String createString;    
         java.sql.Statement stmt;
         
@@ -55,7 +57,7 @@ public class Orders_Table {
     }
 
             //Insert Items data
-    public static void createOrder(int Ord_ID, int Cust_ID, String Fin, String Ord_Date) 
+    public void createOrder(int Ord_ID, int Cust_ID, String Fin, String Ord_Date) 
         throws TableException{
     
     java.sql.Statement stmt;
@@ -70,10 +72,26 @@ public class Orders_Table {
             throw new TableException("Unable to create a new Order in the Database." + "\nDetaill: " + e);
         }
     }
-
     
-
-
-    
-    
+        public static java.util.ArrayList getAllOrders()
+            throws Order_Queries.TableException, TableException{
+        int id; String fn; String ln;
+        java.sql.Statement stmt;
+        Object p = null;
+        java.util.ArrayList results = null;
+        java.sql.ResultSet rs = null;
+        
+        try{
+          String createString = "select * from " + ORDERS_TABLE_NAME + ";" ;                
+          stmt = sqlConn.createStatement();
+          rs = stmt.executeQuery(createString);  
+          results = new java.util.ArrayList();
+            while (rs.next() == true)
+                results.add(new OrderSystem_Classes.Orders (rs.getInt("Order_ID"), rs.getInt("CustomerID"), 
+                        rs.getString("Financial"), rs.getString("OrderDate")));  
+        }catch (java.sql.SQLException e){
+            throw new TableException("Unable to search Order Database." + "\nDetaill: " + e);
+        }
+        return results;
+    }    
 }

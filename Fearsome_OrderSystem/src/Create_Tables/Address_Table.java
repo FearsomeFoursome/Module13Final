@@ -27,7 +27,7 @@ public class Address_Table {
     
     // Drop Table
     
-    static void reset()throws TableException{
+    public void reset()throws TableException{
         String createString;    
         java.sql.Statement stmt;
         
@@ -53,7 +53,7 @@ public class Address_Table {
             "State varchar(50) NOT NULL, " + 
             "Zip integer NOT NULL, " +
             "PRIMARY KEY (AddressID), " + 
-            "FOREIGN KEY (CustomerID) REFERENCES FEARSOME_CUSTOMER (CustomerID)) ";
+            "FOREIGN KEY (CustomerID) REFERENCES FEFO_CUSTOMERS (CustomerID)) ";
             stmt = sqlConn.createStatement();
             stmt.executeUpdate(createString);
         } catch (java.sql.SQLException e) {
@@ -62,7 +62,7 @@ public class Address_Table {
     }
 
         //Insert Address_Table data
-    public static void createAddress(int Addr_ID, int Cust_ID, String Addr_Type,
+    public void createAddress(int Addr_ID, int Cust_ID, String Addr_Type,
                                         String Addr1, String Addr2, String Addr_City, String Addr_State, int Addr_Zip) 
         throws TableException{
     
@@ -81,4 +81,27 @@ public class Address_Table {
         }
     }
     
+    public static java.util.ArrayList getAllAddresses()
+            throws TableException{
+        int id; String fn; String ln;
+        java.sql.Statement stmt;
+        Object p = null;
+        java.util.ArrayList results = null;
+        java.sql.ResultSet rs = null;
+        
+        try{
+          String createString = "select * from " + ADDRESS_TABLE_NAME + ";" ;
+          stmt = sqlConn.createStatement();
+          rs = stmt.executeQuery(createString);  
+          results = new java.util.ArrayList();
+            while (rs.next() == true)
+                results.add(new OrderSystem_Classes.Address (rs.getInt("AddressID"), rs.getInt("CustomerID"), 
+                        rs.getString("AddressType"), rs.getString("Address1"), rs.getString("Address2"), 
+                        rs.getString("City"), rs.getString("State"), rs.getInt("Zip")));  
+        }catch (java.sql.SQLException e){
+            throw new TableException("Unable to search Address Table." + "\nDetaill: " + e);
+        }
+        return results;
+    }
+
 }

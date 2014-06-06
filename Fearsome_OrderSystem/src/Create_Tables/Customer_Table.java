@@ -4,6 +4,9 @@
  */
 package Create_Tables;
 
+import static Create_Tables.Address_Table.ADDRESS_TABLE_NAME;
+import static Create_Tables.Address_Table.sqlConn;
+
 
 /**
  *
@@ -25,7 +28,7 @@ public class Customer_Table {
     }
     // Drop Table
     
-    static void reset()throws TableException{
+    public void reset()throws TableException{
         String createString;    
         java.sql.Statement stmt;
         
@@ -50,10 +53,13 @@ public class Customer_Table {
             "EmailAddress varchar(50) NOT NULL, " + 
             "PhoneNumber varchar(13) NULL, " + 
             "OrderIDs integer NULL, " +
-            "PRIMARY KEY (CustomerID), " + 
+            "PRIMARY KEY (CustomerID))";
+/*                    
             "FOREIGN KEY (BillAddress) REFERENCES FEARSOME_ADDRESS (AddressID), " + 
             "FOREIGN KEY (ShipAddress) REFERENCES FEARSOME_ADDRESS (AddressID), " + 
             "FOREIGN KEY (OrderIDs) REFERENCES FEARSOME_ORDERS (OrderID)) ";
+            * 
+            */ 
             stmt = sqlConn.createStatement();
             stmt.executeUpdate(createString);
         } catch (java.sql.SQLException e) {
@@ -75,7 +81,7 @@ public class Customer_Table {
  */
     
     //Insert Customer_Table data
-    public static void createCustomer(int Cust_ID, String FName, String LName, int BillAddr, 
+    public void createCustomer(int Cust_ID, String FName, String LName, int BillAddr, 
                                         int ShipAddr, String EMail, String PhNbr, int OrderNbr) 
         throws TableException{
     
@@ -92,5 +98,28 @@ public class Customer_Table {
         } catch (java.sql.SQLException e) {
             throw new TableException("Unable to create a new Customer in the Database." + "\nDetaill: " + e);
         }
+    }
+    
+    public static java.util.ArrayList getAllCustomers()
+            throws Address_Table.TableException, TableException{
+        int id; String fn; String ln;
+        java.sql.Statement stmt;
+        Object p = null;
+        java.util.ArrayList results = null;
+        java.sql.ResultSet rs = null;
+        
+        try{
+          String createString = "select * from " + CUSTOMER_TABLE_NAME + ";" ;
+          stmt = sqlConn.createStatement();
+          rs = stmt.executeQuery(createString);  
+          results = new java.util.ArrayList();
+            while (rs.next() == true)
+                results.add(new OrderSystem_Classes.Customer (rs.getInt("CustomerID"), rs.getString("FirstName"), 
+                        rs.getString("LastName"), rs.getInt("BillAddress"), rs.getInt("ShipAddress"), 
+                        rs.getString("EmailAddress"), rs.getString("PhoneNumber"), rs.getInt("OrderIDs")));  
+        }catch (java.sql.SQLException e){
+            throw new TableException("Unable to search Customer Table." + "\nDetaill: " + e);
+        }
+        return results;
     }
 }
